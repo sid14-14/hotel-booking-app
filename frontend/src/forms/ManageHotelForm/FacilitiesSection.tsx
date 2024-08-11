@@ -18,6 +18,7 @@ const FacilitiesSection = () => {
               type="checkbox"
               value={facility}
               {...register("facilities", {
+                // user can select one or more. facilities: current selected facilities by the user
                 validate: (facilities) => {
                   if (facilities && facilities.length > 0) {
                     return true;

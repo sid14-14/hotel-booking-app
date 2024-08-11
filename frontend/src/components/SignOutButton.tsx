@@ -3,12 +3,13 @@ import * as apiClient from "../api-client";
 import { useAppContext } from "../contexts/AppContext";
 
 const SignOutButton = () => {
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient(); //react-query hook which lets us do stuff at global level
   const { showToast } = useAppContext();
 
   const mutation = useMutation(apiClient.signOut, {
     onSuccess: async () => {
-      await queryClient.invalidateQueries("validateToken");
+      //this forces the validation token to run again, and also check our expired token
+      await queryClient.invalidateQueries("validateToken"); //this comes from AppContext in isError we gave it name validateToken
       showToast({ message: "Signed Out!", type: "SUCCESS" });
     },
     onError: (error: Error) => {
@@ -17,7 +18,7 @@ const SignOutButton = () => {
   });
 
   const handleClick = () => {
-    mutation.mutate();
+    mutation.mutate(); //invokes api call
   };
 
   return (

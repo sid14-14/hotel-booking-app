@@ -20,7 +20,7 @@ const hotelSchema = new mongoose.Schema<HotelType>({
   country: { type: String, required: true },
   description: { type: String, required: true },
   type: { type: String, required: true },
-  adultCount: { type: Number, required: true },
+  adultCount: { type: Number, required: true }, //based on search criteria, if one searchs for 3 adults he should get it
   childCount: { type: Number, required: true },
   facilities: [{ type: String, required: true }],
   pricePerNight: { type: Number, required: true },

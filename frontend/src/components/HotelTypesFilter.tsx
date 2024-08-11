@@ -1,8 +1,9 @@
+//this is almost copy of StarRatingFilter
 import { hotelTypes } from "../config/hotel-options-config";
 
 type Props = {
-  selectedHotelTypes: string[];
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  selectedHotelTypes: string[]; //currently selected hoteltypes if any
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void; //func to update the state
 };
 
 const HotelTypesFilter = ({ selectedHotelTypes, onChange }: Props) => {

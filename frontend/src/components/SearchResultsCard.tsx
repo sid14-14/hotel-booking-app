@@ -8,6 +8,7 @@ type Props = {
 const SearchResultsCard = ({ hotel }: Props) => {
   return (
     <div className="grid grid-cols-1 xl:grid-cols-[2fr_3fr] border border-slate-300 rounded-lg p-8 gap-8">
+      {/* height will always be 300px w is kept full to maintain the aspect ration */}
       <div className="w-full h-[300px]">
         <img
           src={hotel.imageUrls[0]}
@@ -22,6 +23,7 @@ const SearchResultsCard = ({ hotel }: Props) => {
                 <AiFillStar className="fill-yellow-400" />
               ))}
             </span>
+            {/* margin tothe left and text as small */}
             <span className="ml-1 text-sm">{hotel.type}</span>
           </div>
           <Link
@@ -33,9 +35,11 @@ const SearchResultsCard = ({ hotel }: Props) => {
         </div>
 
         <div>
+        {/* line-clamp-4: truncates the lines */}
           <div className="line-clamp-4">{hotel.description}</div>
         </div>
-
+        {/* this will push all childrens of the grid to bottom */}
+        {/* whitespace-nowrap: this prevents the txt to jumping on the new line */}
         <div className="grid grid-cols-2 items-end whitespace-nowrap">
           <div className="flex gap-1 items-center">
             {hotel.facilities.slice(0, 3).map((facility) => (
@@ -52,6 +56,7 @@ const SearchResultsCard = ({ hotel }: Props) => {
             <span className="font-bold">£{hotel.pricePerNight} per night</span>
             <Link
               to={`/detail/${hotel._id}`}
+              // h-full: btn is of full height of container, max-w-fit: shrink the fit of content of btn
               className="bg-blue-600 text-white h-full p-2 font-bold text-xl max-w-fit hover:bg-blue-500"
             >
               View More

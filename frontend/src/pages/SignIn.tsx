@@ -4,7 +4,7 @@ import * as apiClient from "../api-client";
 import { useAppContext } from "../contexts/AppContext";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
-export type SignInFormData = {
+export type SignInFormData = { //type for our form
   email: string;
   password: string;
 };
@@ -22,19 +22,22 @@ const SignIn = () => {
     handleSubmit,
   } = useForm<SignInFormData>();
 
+  // we use useMutation caz we are creating something in the backend
   const mutation = useMutation(apiClient.signIn, {
     onSuccess: async () => {
+      // console.log("user has signed in")
       showToast({ message: "Sign in Successful!", type: "SUCCESS" });
       await queryClient.invalidateQueries("validateToken");
+      //cond to checking react-rotuer dom state for a location and if the val exists then we need to send the user there instead, so if some info filled then we take user to the same hotel w saved info(in our blue box) 
       navigate(location.state?.from?.pathname || "/");
     },
     onError: (error: Error) => {
-      showToast({ message: error.message, type: "ERROR" });
+      showToast({ message: error.message, type: "ERROR" }); //our backend gona return err msg to frontend if smtng went wrong
     },
   });
-
+  //when we submit our form onsubmit gets called, which calls handlesubmit which bts checks if fields valid...
   const onSubmit = handleSubmit((data) => {
-    mutation.mutate(data);
+    mutation.mutate(data); //whenever we call mutate react query it calls apiclient.signin
   });
 
   return (
@@ -69,7 +72,8 @@ const SignIn = () => {
         )}
       </label>
       <span className="flex items-center justify-between">
-        <span className="text-sm">
+        <span className="text-sm"> 
+        {/* this done to over-ride text: small size */}
           Not Registered?{" "}
           <Link className="underline" to="/register">
             Create an account here

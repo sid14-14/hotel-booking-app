@@ -23,8 +23,9 @@ const Booking = () => {
 
       setNumberOfNights(Math.ceil(nights));
     }
-  }, [search.checkIn, search.checkOut]);
+  }, [search.checkIn, search.checkOut]); //when we make checkin/checkout changes in the global state this re-runs and gets the new nos of nights based on new vals
 
+  //we create paymentIntentData in the backend which calls stripe to create paymentIntent on stripe and returns us back a client secret which is ref to that paymentintent. so like a link back to the invoice 
   const { data: paymentIntentData } = useQuery(
     "createPaymentIntent",
     () =>
@@ -33,10 +34,12 @@ const Booking = () => {
         numberOfNights.toString()
       ),
     {
+      //only call this query if we have hotelId and numberOfNights>0
       enabled: !!hotelId && numberOfNights > 0,
     }
   );
 
+  //this query isnt gona run if we have hotelid var, good for perf as we not calling api many times 
   const { data: hotel } = useQuery(
     "fetchHotelByID",
     () => apiClient.fetchHotelById(hotelId as string),
@@ -44,31 +47,34 @@ const Booking = () => {
       enabled: !!hotelId,
     }
   );
-
+  //fetching currUser endpoint using reactQuery
   const { data: currentUser } = useQuery(
     "fetchCurrentUser",
     apiClient.fetchCurrentUser
   );
-
-  if (!hotel) {
+  //to test this, we need to add a response type to func, caz when we add jsx stuff intellisence gives us proper type(we added in shared folder)
+  // console.log(currentUser?.email); //just to see if this working
+  if (!hotel) { //becaz hotelquery comes from query hook sometimes, it can be undefined. it can be solved by return empty react frag
     return <></>;
   }
 
   return (
     <div className="grid md:grid-cols-[1fr_2fr]">
       <BookingDetailsSummary
+      //top lvl/parent component that handles all the states and does majority of data fetching here in one place we just passing to child components deping on what they need
         checkIn={search.checkIn}
         checkOut={search.checkOut}
         adultCount={search.adultCount}
         childCount={search.childCount}
         numberOfNights={numberOfNights}
-        hotel={hotel}
+        hotel={hotel} //becaz hotelquery comes from query hook sometimes, it can be undefined. it can be solved by return empty react frag
       />
       {currentUser && paymentIntentData && (
+        // Elements comes from stripe frontend sdk and gives access to some ui els that lets user end some card details and lets us create a payment from the ui using sdk aswell  
         <Elements
           stripe={stripePromise}
           options={{
-            clientSecret: paymentIntentData.clientSecret,
+            clientSecret: paymentIntentData.clientSecret, //connecting stripe els on the front end to the invoice we just created, so whenever user creates a card payment strip will know what its for
           }}
         >
           <BookingForm

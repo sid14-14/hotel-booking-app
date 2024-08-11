@@ -1,5 +1,5 @@
 import { HotelType } from "../../../backend/src/shared/types";
-
+// all fetching is done at page level to get the data: Booking.tsx, and passing different props to different components, thus easy to create presentational components: BookingDetailsSummary.tsx 
 type Props = {
   checkIn: Date;
   checkOut: Date;
@@ -18,6 +18,7 @@ const BookingDetailsSummary = ({
   hotel,
 }: Props) => {
   return (
+    // h-fit=> height streches only till the context 
     <div className="grid gap-4 rounded-lg border border-slate-300 p-5 h-fit">
       <h2 className="text-xl font-bold">Your Booking Details</h2>
       <div className="border-b py-2">

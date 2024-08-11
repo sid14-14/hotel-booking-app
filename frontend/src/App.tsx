@@ -31,6 +31,7 @@ const App = () => {
           }
         />
         <Route
+        //differetn routes are passed different els who can be rendered in the children component in "Layout.tsx"
           path="/search"
           element={
             <Layout>
@@ -63,6 +64,7 @@ const App = () => {
           }
         />
 
+        {/* to render loggedin routes */}
         {isLoggedIn && (
           <>
             <Route

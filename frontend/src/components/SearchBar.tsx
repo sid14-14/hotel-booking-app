@@ -7,8 +7,8 @@ import { useNavigate } from "react-router-dom";
 
 const SearchBar = () => {
   const navigate = useNavigate();
-  const search = useSearchContext();
-
+  const search = useSearchContext(); //picking our search context we created in searchcontext(gloabal state)
+  //get the search val if any exists in our context, then stored in localstate of the form-field as the user is typing as it causes entire app to re-render any t user changes any of the inputs, which will give perform overhead, so when user submits the form by clicking submit, we know they are finished at the fields of the form, thats when we save these local vals to the global state
   const [destination, setDestination] = useState<string>(search.destination);
   const [checkIn, setCheckIn] = useState<Date>(search.checkIn);
   const [checkOut, setCheckOut] = useState<Date>(search.checkOut);
@@ -16,33 +16,42 @@ const SearchBar = () => {
   const [childCount, setChildCount] = useState<number>(search.childCount);
 
   const handleSubmit = (event: FormEvent) => {
-    event.preventDefault();
-    search.saveSearchValues(
+    event.preventDefault(); // this prevents the form from automatically doing post req
+    search.saveSearchValues( //save these local vals to the global state in search context
       destination,
       checkIn,
       checkOut,
       adultCount,
       childCount
     );
+    //after it saves the val to the state, it pushes us to the /search page
     navigate("/search");
   };
 
   const minDate = new Date();
   const maxDate = new Date();
-  maxDate.setFullYear(maxDate.getFullYear() + 1);
+  maxDate.setFullYear(maxDate.getFullYear() + 1); //maxdate is gona be one year from now
 
   return (
+    // using react hook form
     <form
       onSubmit={handleSubmit}
+      // -mt-8=> negative margin, so that searchbar overlaps container and header
+      //grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5=> depending on screen size we have different nos of cols
+      //items-center=> align items vertically 
       className="-mt-8 p-3 bg-orange-400 rounded shadow-md grid grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5 items-center gap-4"
     >
+      {/* flex-row=> our icon and input is aligned in a row */}
+      {/* flex-1=> take up all available space */}
       <div className="flex flex-row items-center flex-1 bg-white p-2">
+      {/* mr-2=> adds spacing to the right */}
         <MdTravelExplore size={25} className="mr-2" />
         <input
           placeholder="Where are you going?"
+          // w-full=> take up full width
           className="text-md w-full focus:outline-none"
           value={destination}
-          onChange={(event) => setDestination(event.target.value)}
+          onChange={(event) => setDestination(event.target.value)} //sets destination any-t this input changes
         />
       </div>
 
@@ -72,12 +81,12 @@ const SearchBar = () => {
       </div>
       <div>
         <DatePicker
-          selected={checkIn}
+          selected={checkIn} //pre-selects date of check val
           onChange={(date) => setCheckIn(date as Date)}
-          selectsStart
+          selectsStart //as we working in ranges, this means select first date specified in startstate
           startDate={checkIn}
           endDate={checkOut}
-          minDate={minDate}
+          minDate={minDate} //this specifies what a user can/cant select
           maxDate={maxDate}
           placeholderText="Check-in Date"
           className="min-w-full bg-white p-2 focus:outline-none"
@@ -99,6 +108,7 @@ const SearchBar = () => {
         />
       </div>
       <div className="flex gap-1">
+        {/* w-2/3:we want search to take up 2/3 of available space and clear to 1/3 space */}
         <button className="w-2/3 bg-blue-600 text-white h-full p-2 font-bold text-xl hover:bg-blue-500">
           Search
         </button>

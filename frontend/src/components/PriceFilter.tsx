@@ -1,3 +1,4 @@
+//we store state for this in tope level search component
 type Props = {
   selectedPrice?: number;
   onChange: (value?: number) => void;

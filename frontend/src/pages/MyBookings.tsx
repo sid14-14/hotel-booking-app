@@ -12,6 +12,7 @@ const MyBookings = () => {
   }
 
   return (
+    // space b/w title and induvidual cards
     <div className="space-y-5">
       <h1 className="text-3xl font-bold">My Bookings</h1>
       {hotels.map((hotel) => (
@@ -23,6 +24,7 @@ const MyBookings = () => {
             />
           </div>
           <div className="flex flex-col gap-4 overflow-y-auto max-h-[300px]">
+            {/* we add a scrol bar if user has booked a hotel multiple times  */}
             <div className="text-2xl font-bold">
               {hotel.name}
               <div className="text-xs font-normal">

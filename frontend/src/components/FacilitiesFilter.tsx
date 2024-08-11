@@ -1,3 +1,4 @@
+//this is almost copy of StarRatingFilter
 import { hotelFacilities } from "../config/hotel-options-config";
 
 type Props = {

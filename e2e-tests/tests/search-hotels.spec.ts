@@ -35,7 +35,7 @@ test("should show hotel detail", async ({ page }) => {
   await page.getByRole("button", { name: "Search" }).click();
 
   await page.getByText("Dublin Getaways").click();
-  await expect(page).toHaveURL(/detail/);
+  await expect(page).toHaveURL(/detail/); //we dont wana b to exact in the url, eg endpoint changes in the future, just make sure url has detail in it
   await expect(page.getByRole("button", { name: "Book now" })).toBeVisible();
 });
 

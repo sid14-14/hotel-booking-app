@@ -5,6 +5,8 @@ import { BsBuilding, BsMap } from "react-icons/bs";
 import { BiHotel, BiMoney, BiStar } from "react-icons/bi";
 
 const MyHotels = () => {
+  // fetch req to fetch hotels
+  //whenever useQuery hook called, it gives us response body as a var called data, we just renamed it to hotelData here
   const { data: hotelData } = useQuery(
     "fetchMyHotels",
     apiClient.fetchMyHotels,
@@ -19,6 +21,8 @@ const MyHotels = () => {
 
   return (
     <div className="space-y-5">
+      {/* span tags used to put things in one line */}
+      {/* justify-between: makes sure h1 and link el is pushed apart */}
       <span className="flex justify-between">
         <h1 className="text-3xl font-bold">My Hotels</h1>
         <Link
@@ -28,16 +32,19 @@ const MyHotels = () => {
           Add Hotel
         </Link>
       </span>
-      <div className="grid grid-cols-1 gap-8">
+        {/* div below alligns nicely in a column for us */}
+      <div className="grid grid-cols-1 gap-8"> 
         {hotelData.map((hotel) => (
           <div
             data-testid="hotel-card"
             className="flex flex-col justify-between border border-slate-300 rounded-lg p-8 gap-5"
           >
             <h2 className="text-2xl font-bold">{hotel.name}</h2>
+            {/* whitespace-pre-line: prevents the text from overflowing, and drops on to next line if it does*/}
             <div className="whitespace-pre-line">{hotel.description}</div>
             <div className="grid grid-cols-5 gap-2">
               <div className="border border-slate-300 rounded-sm p-3 flex items-center">
+                {/*flex: icon and text is gona appear side by side, items-center: aligns items vertically for us */}
                 <BsMap className="mr-1" />
                 {hotel.city}, {hotel.country}
               </div>
@@ -57,6 +64,7 @@ const MyHotels = () => {
                 {hotel.starRating} Star Rating
               </div>
             </div>
+            {/* this gona position "View Details" link to the rhs of the contianer */}
             <span className="flex justify-end">
               <Link
                 to={`/edit-hotel/${hotel._id}`}

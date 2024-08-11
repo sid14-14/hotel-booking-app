@@ -65,19 +65,21 @@ const BookingForm = ({ currentUser, paymentIntent }: Props) => {
     },
   });
 
+  //even though cant edit much of onsubmit(in forms hooks stuff), it makes sense to keep all the things togeher so that its easier to submit the formdata and parse it at the backend in one piece 
   const onSubmit = async (formData: BookingFormData) => {
     if (!stripe || !elements) {
       return;
     }
-
-    const result = await stripe.confirmCardPayment(paymentIntent.clientSecret, {
+    // this only called when form gets submitted, send the card details user enters to stripe
+    //  paymentIntent.clientSecret: to tell stripe to what invoice user is paying for
+    const result = await stripe.confirmCardPayment(paymentIntent.clientSecret, { //stripe var from stripe hook provided by sdk, which gives us access to all features of stripe. so this is different from stripe added/used in AppContext.tsx. 
       payment_method: {
         card: elements.getElement(CardElement) as StripeCardElement,
       },
-    });
+    }); //this confirms our code and pick the payment using card details user enterd
 
-    if (result.paymentIntent?.status === "succeeded") {
-      bookRoom({ ...formData, paymentIntentId: result.paymentIntent.id });
+    if (result.paymentIntent?.status === "succeeded") { //book room, if user refreshs whole flow starts from start
+      bookRoom({ ...formData, paymentIntentId: result.paymentIntent.id }); //here we just adding paymentIntentId(we just want this to be of updated val) to the rest of the fields of the formData
     }
   };
 

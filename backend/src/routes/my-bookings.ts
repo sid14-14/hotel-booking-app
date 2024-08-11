@@ -8,18 +8,21 @@ const router = express.Router();
 // /api/my-bookings
 router.get("/", verifyToken, async (req: Request, res: Response) => {
   try {
+    //searches all of hotel docs we have, checks bookings arr and returns all hotels that has userId as part of booking obj in the bookings arr
     const hotels = await Hotel.find({
       bookings: { $elemMatch: { userId: req.userId } },
     });
 
     const results = hotels.map((hotel) => {
+      //only get the objs from booking arr where userId is our userId in our req
       const userBookings = hotel.bookings.filter(
         (booking) => booking.userId === req.userId
       );
 
+      //update booking arr w this new userBookings arr
       const hotelWithUserBookings: HotelType = {
-        ...hotel.toObject(),
-        bookings: userBookings,
+        ...hotel.toObject(), //converts mongoose hotel to js obj
+        bookings: userBookings, //updating
       };
 
       return hotelWithUserBookings;

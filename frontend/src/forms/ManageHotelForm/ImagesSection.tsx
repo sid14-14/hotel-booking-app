@@ -9,13 +9,15 @@ const ImagesSection = () => {
     setValue,
   } = useFormContext<HotelFormData>();
 
+  //here we displaying the images we added to our hotel, we want it to be displayed when we wan to edit it
   const existingImageUrls = watch("imageUrls");
 
   const handleDelete = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>, //specifying type for a mouse btn click
     imageUrl: string
   ) => {
-    event.preventDefault();
+    event.preventDefault(); //whenver we click inside btn inside the form, default action is to submit the form, this line prevents that to happen
+    //removing few imgurls and returning new arr
     setValue(
       "imageUrls",
       existingImageUrls.filter((url) => url !== imageUrl)
@@ -25,14 +27,19 @@ const ImagesSection = () => {
   return (
     <div>
       <h2 className="text-2xl font-bold mb-3">Images</h2>
-      <div className="border rounded p-4 flex flex-col gap-4">
+      {/* this gives the light grey border effect
+      gap-4: between border and input  */}
+      <div className="border rounded p-4 flex flex-col gap-4"> 
         {existingImageUrls && (
           <div className="grid grid-cols-6 gap-4">
             {existingImageUrls.map((url) => (
-              <div className="relative group">
+              // this acts as hover functionality which helps in deleting img if we want
+              <div className="relative group"> 
                 <img src={url} className="min-h-full object-cover" />
                 <button
                   onClick={(event) => handleDelete(event, url)}
+                  // absolute inset-0: btn is positioned based on its closest el that has classname of relative
+                  //flex items-center justify-center: centers the text in the middle of the img 
                   className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 text-white"
                 >
                   Delete
@@ -44,13 +51,14 @@ const ImagesSection = () => {
 
         <input
           type="file"
-          multiple
-          accept="image/*"
+          multiple //lets user select multiple files
+          accept="image/*" //only files of type image is accepted not text/pdf ...
+          //w-full: take all space available w/in container
           className="w-full text-gray-700 font-normal"
           {...register("imageFiles", {
             validate: (imageFiles) => {
               const totalLength =
-                imageFiles.length + (existingImageUrls?.length || 0);
+                imageFiles.length + (existingImageUrls?.length || 0); //existingImageUrls: whenever user gona add new hotel then there arent gona be img urls, so this works for both addhotel and edithotel situation
 
               if (totalLength === 0) {
                 return "At least one image should be added";

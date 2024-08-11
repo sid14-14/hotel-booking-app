@@ -66,16 +66,19 @@ test("should display hotels", async ({ page }) => {
 });
 
 test("should edit hotel", async ({ page }) => {
+  //we start from my-hotels page caz as we can test few details, btns, texts correctly to the edit hotel page
   await page.goto(`${UI_URL}my-hotels`);
 
   await page.getByRole("link", { name: "View Details" }).first().click();
 
+  //state: "attached"=> telling playwright to wait for a while bfor this appears in the DOM 
   await page.waitForSelector('[name="name"]', { state: "attached" });
   await expect(page.locator('[name="name"]')).toHaveValue("Dublin Getaways");
   await page.locator('[name="name"]').fill("Dublin Getaways UPDATED");
   await page.getByRole("button", { name: "Save" }).click();
   await expect(page.getByText("Hotel Saved!")).toBeVisible();
 
+  //this refreshed the page and gives us benefit of making sure whenever we update the hotel name input after we refresh the page and data the input still has updated val in it
   await page.reload();
 
   await expect(page.locator('[name="name"]')).toHaveValue(

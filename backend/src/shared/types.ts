@@ -1,3 +1,6 @@
+// this done even if we have userschema in "user.ts" caz 
+// usertype is used whenever we create a new user. this in the front-end makes sure all fields are correct, react helps to detect if any error
+// userschema helps us to add these properties
 export type UserType = {
   _id: string;
   email: string;
@@ -6,6 +9,7 @@ export type UserType = {
   lastName: string;
 };
 
+//we added this here caz this is being used by both front-end and back-end
 export type HotelType = {
   _id: string;
   userId: string;

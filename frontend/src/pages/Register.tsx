@@ -14,39 +14,47 @@ export type RegisterFormData = {
 
 const Register = () => {
   const queryClient = useQueryClient();
-  const navigate = useNavigate();
+  const navigate = useNavigate(); //take back the user to homepage afer register
   const { showToast } = useAppContext();
 
   const {
-    register,
+    register, //passed to almost all our inputs so that react-hooks can manage it for us
     watch,
     handleSubmit,
     formState: { errors },
   } = useForm<RegisterFormData>();
 
+  //makes a req that changes/create something thus called mutation, used for any post/delete req
+  //apiClient.register does fetch req
+  // we use react query caz we dont have to manage state ourselves, its built in to usemutation hook
   const mutation = useMutation(apiClient.register, {
     onSuccess: async () => {
       showToast({ message: "Registration Success!", type: "SUCCESS" });
       await queryClient.invalidateQueries("validateToken");
       navigate("/");
     },
+    // this done to catch err defined in api-clients: if (!response.ok) {
     onError: (error: Error) => {
       showToast({ message: error.message, type: "ERROR" });
     },
   });
-
+  //handleSubmit will submit form, check for any errors, and takes care of err obj
   const onSubmit = handleSubmit((data) => {
+    // we passing RegisterFormData to mutation, which will pass to apiClient.register
     mutation.mutate(data);
   });
 
   return (
     <form className="flex flex-col gap-5" onSubmit={onSubmit}>
       <h2 className="text-3xl font-bold">Create an Account</h2>
+      {/* flex-col: fistName and LastName to be in a col,  */}
+      {/* md:flex-row: for med screens firstName and lstName is dispalyed in flex-row side by side */}
       <div className="flex flex-col md:flex-row gap-5">
         <label className="text-gray-700 text-sm font-bold flex-1">
           First Name
-          <input
-            className="border rounded w-full py-1 px-2 font-normal"
+          <input //input inside label caz its html std to say label is connected to input
+            className="border rounded w-full py-1 px-2 font-normal" //font-normal: put here to override bold we set just above
+            // ...register: it has bunch of properties and stuff on it, by ... we spreading each induvidual props on to our input. like onsubmit, onchange put here 
             {...register("firstName", { required: "This field is required" })}
           ></input>
           {errors.firstName && (
